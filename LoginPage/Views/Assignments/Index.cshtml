@@ -1,0 +1,249 @@
+﻿
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<LoginPage.Models.Assignment>
+
+@{
+    ViewData["Title"] = "Ödev & Görev Paneli";
+}
+
+<!-- Bootstrap 5 CDN & İkonlar (Tasarımın Bozulmaması İçin) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        background-color: #f8f9fa;
+    }
+
+    /* Üst Banner */
+    .hero-banner {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 16px;
+        padding: 25px 30px;
+        box-shadow: 0 10px 20px rgba(118, 75, 162, 0.2);
+        margin-bottom: 25px;
+    }
+
+    /* İstatistik Kartları */
+    .stat-card {
+        background: white;
+        border-radius: 14px;
+        padding: 18px 20px;
+        border: 1px solid #eef2f5;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .bg-purple-light {
+        background-color: #f0ebf8;
+        color: #764ba2;
+    }
+
+    .bg-blue-light {
+        background-color: #e8f0fe;
+        color: #667eea;
+    }
+
+    .bg-green-light {
+        background-color: #e6f4ea;
+        color: #1e8e3e;
+    }
+
+    /* Tablo Kartı */
+    .content-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        border: 1px solid #eef2f5;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        margin-top: 25px;
+    }
+
+    /* Özel Tablo Düzenlemeleri */
+    .custom-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+    }
+
+        .custom-table th {
+            color: #6c757d;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            border: none;
+            padding: 12px 16px;
+        }
+
+        .custom-table td {
+            background-color: #fcfcfd;
+            padding: 16px;
+            vertical-align: middle;
+            border-top: 1px solid #f1f3f5;
+            border-bottom: 1px solid #f1f3f5;
+        }
+
+        .custom-table tr td:first-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            border-left: 1px solid #f1f3f5;
+        }
+
+        .custom-table tr td:last-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border-right: 1px solid #f1f3f5;
+        }
+
+    .badge-status {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 12px;
+    }
+</style>
+
+<div class="container py-4">
+
+    <!-- Üst Karşılama Banner'ı -->
+    <div class="hero-banner d-flex justify-content-between align-items-center">
+        <div>
+            <h3 class="fw-bold mb-1">Hoş Geldiniz! 👋</h3>
+            <p class="mb-0 text-white-50 small">Ödevlerinizi ve sistem görevlerinizi buradan takip edebilirsiniz.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-light text-dark shadow-sm fw-bold px-3 py-2 text-decoration-none">
+            <i class="fa-solid fa-plus me-2" style="color: #764ba2;"></i>Yeni Ödev Ekle
+        </a>
+    </div>
+
+    <!-- İSTATİSTİK KARTLARI (YAN YANA 3 KOLON) -->
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon bg-purple-light me-3">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <div>
+                    <span class="text-muted small d-block">Toplam Ödev</span>
+                    <h4 class="fw-bold mb-0">@(Model != null ? Model.Count() : 0)</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon bg-blue-light me-3">
+                    <i class="fa-solid fa-spinner"></i>
+                </div>
+                <div>
+                    <span class="text-muted small d-block">Devam Eden / Yapılacak</span>
+                    <h4 class="fw-bold mb-0">@(Model != null ? Model.Count(x => x.Status == "Yapılacak" || x.Status == "Devam Ediyor") : 0)</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon bg-green-light me-3">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <span class="text-muted small d-block">Tamamlananlar</span>
+                    <h4 class="fw-bold mb-0">@(Model != null ? Model.Count(x => x.Status == "Tamamlandı") : 0)</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NİZAMİ VE ORANTILI ÖDEV LİSTESİ TABLOSU -->
+    <div class="content-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0 text-dark">
+                <i class="fa-solid fa-list-check me-2" style="color: #764ba2;"></i>Ödev & Proje Listesi
+            </h5>
+            <span class="badge bg-light text-dark border">Aktif Veritabanı Listesi</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table custom-table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Ödev Adı</th>
+                        <th style="width: 25%;">Ders / Konu</th>
+                        <th style="width: 20%;">Son Teslim Tarihi</th>
+                        <th style="width: 15%;">Durum</th>
+                        <th style="width: 10%; text-align: right;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong class="d-block text-dark">@item.Title</strong>
+                                    <small class="text-muted">@item.Description</small>
+                                </td>
+                                <td><span class="fw-medium text-secondary">@item.ClassName</span></td>
+                                <td><i class="fa-regular fa-calendar me-1 text-muted"></i> @item.DueDate.ToString("dd MMMM yyyy")</td>
+                                <td>
+                                    @if (item.Status == "Tamamlandı")
+                                    {
+                                        <span class="badge badge-status bg-success text-white">Tamamlandı</span>
+                                    }
+                                    else if (item.Status == "Devam Ediyor")
+                                    {
+                                        <span class="badge badge-status bg-warning text-dark">Devam Ediyor</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-status bg-secondary text-white">@item.Status</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <!-- Düzenle Butonu -->
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-light border me-1" title="Düzenle">
+                                        <i class="fa-solid fa-pen text-secondary"></i>
+                                    </a>
+
+                                    <!-- Sil Butonu -->
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-light border text-danger" title="Sil"
+                                       onclick="return confirm('Bu ödevi silmek istediğinize emin misiniz?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">
+                                Henüz eklenmiş bir ödev bulunmuyor.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
