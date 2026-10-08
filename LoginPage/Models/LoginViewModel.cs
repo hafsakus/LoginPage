@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LoginPage.Models // Kendi proje adınla düzenlemeyi unutma
+namespace LoginPage.Models
 {
     public class LoginViewModel
     {

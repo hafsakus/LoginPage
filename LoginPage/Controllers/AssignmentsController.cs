@@ -14,28 +14,25 @@ namespace LoginPage.Controllers
             _context = context;
         }
 
-        // 1. Bütün Ödevleri Listeleme
         public IActionResult Index()
         {
             var assignment = _context.Assignments.ToList();
             return View(assignment);
         }
 
-        // 2. Yeni Ödev Ekleme Ekranı (GET)
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // 2. Yeni Ödev Kaydetme (POST)
         [HttpPost]
         public IActionResult Create(Assignment assignment)
         {
             ModelState.Remove("UserId");
             if (ModelState.IsValid)
             {
-                // Test amaçlı şimdilik UserId = 1 atıyoruz
+             
                 assignment.UserId = 1;
                 _context.Assignments.Add(assignment);
                 _context.SaveChanges();
@@ -44,7 +41,6 @@ namespace LoginPage.Controllers
             return View(assignment);
         }
 
-        // 3. Ödev Durumunu Tek Tıkla Güncelleme
         public IActionResult ChangeStatus(int id, string status)
         {
             var assignment = _context.Assignments.Find(id);
@@ -56,7 +52,6 @@ namespace LoginPage.Controllers
             return RedirectToAction("Index");
         }
 
-        // 4. Ödev Silme
         public IActionResult Delete(int id)
         {
             var assignment = _context.Assignments.Find(id);
@@ -77,7 +72,6 @@ namespace LoginPage.Controllers
             return View(assignment);
         }
 
-        // --- DÜZENLEMEYİ VERİTABANINA KAYDEDER (POST) ---
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Assignment assignment)

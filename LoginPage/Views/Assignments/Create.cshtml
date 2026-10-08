@@ -23,13 +23,11 @@
             <div class="card-body">
                 <form asp-action="Create" method="post">
 
-                    <!-- 1. Ders Adı Kutusunda ClassName Bağlı Olmalı -->
                     <div class="mb-3">
                         <label class="form-label">Ders Adı</label>
                         <input asp-for="ClassName" name="ClassName" class="form-control" placeholder="Örn: Python, C#" required />
                     </div>
 
-                    <!-- 2. Ödev Başlığı Kutusunda Title Bağlı Olmalı -->
                     <div class="mb-3">
                         <label class="form-label">Ödev Başlığı / Konusu</label>
                         <input asp-for="Title" name="Title" class="form-control" placeholder="Örn: If Else Projesi" required />

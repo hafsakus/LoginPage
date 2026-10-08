@@ -8,7 +8,6 @@ namespace LoginPage.Controllers
     {
         private readonly AppDbContext _context;
 
-        // Veritabanı bağlantısını Constructor ile içeri alıyoruz (Dependency Injection)
         public AccountController(AppDbContext context)
         {
             _context = context;
