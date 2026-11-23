@@ -1,5 +1,4 @@
-﻿
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model IEnumerable<LoginPage.Models.Assignment>
 
 @{
@@ -119,14 +118,22 @@
 
 <div class="container py-4">
 
-    <div class="hero-banner d-flex justify-content-between align-items-center">
+    <div class="hero-banner d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
-            <h3 class="fw-bold mb-1">Hoş Geldiniz! 👋</h3>
-            <p class="mb-0 text-white-50 small">Ödevlerinizi ve sistem görevlerinizi buradan takip edebilirsiniz.</p>
+            <h3 class="fw-bold mb-1">Hoş Geldin, @User.Identity?.Name! 👋</h3>
+            <p class="mb-0 text-white-50 small">Sadece senin hesabına tanımlı ödev ve görevleri görüntülüyorsun.</p>
         </div>
-        <a asp-action="Create" class="btn btn-light text-dark shadow-sm fw-bold px-3 py-2 text-decoration-none">
-            <i class="fa-solid fa-plus me-2" style="color: #764ba2;"></i>Yeni Ödev Ekle
-        </a>
+        <div class="d-flex align-items-center gap-2">
+            <a asp-action="Create" class="btn btn-light text-dark shadow-sm fw-bold px-3 py-2 text-decoration-none">
+                <i class="fa-solid fa-plus me-2" style="color: #764ba2;"></i>Yeni Ödev Ekle
+            </a>
+
+            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                <button type="submit" class="btn btn-outline-light fw-semibold px-3 py-2">
+                    <i class="fa-solid fa-right-from-bracket me-1"></i>Çıkış Yap
+                </button>
+            </form>
+        </div>
     </div>
 
     <div class="row g-3">
@@ -170,7 +177,7 @@
             <h5 class="fw-bold mb-0 text-dark">
                 <i class="fa-solid fa-list-check me-2" style="color: #764ba2;"></i>Ödev & Proje Listesi
             </h5>
-            <span class="badge bg-light text-dark border">Aktif Veritabanı Listesi</span>
+            <span class="badge bg-light text-dark border">Kullanıcıya Özel Liste</span>
         </div>
 
         <div class="table-responsive">
@@ -215,10 +222,13 @@
                                         <i class="fa-solid fa-pen text-secondary"></i>
                                     </a>
 
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-light border text-danger" title="Sil"
-                                       onclick="return confirm('Bu ödevi silmek istediğinize emin misiniz?');">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </a>
+                                  
+                                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline"
+                                          onsubmit="return confirm('Bu ödevi silmek istediğinize emin misiniz?');">
+                                        <button type="submit" class="btn btn-sm btn-light border text-danger" title="Sil">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         }
